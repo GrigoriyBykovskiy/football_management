@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="ru">
+	<head>
+		<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+		<meta charset="utf-8">
+		<title>Football manager</title>
+		<meta name="generator" content="Bootply" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+		<link href="css/bootstrap_2.min.css" rel="stylesheet">
+		<link href="css/font-awesome.min.css" rel="stylesheet">
+		<link rel="shortcut icon" href="favicon.ico">
+		<!--[if lt IE 9]>
+			<script src="//html5shim.googlecode.com/svn/trunk/html5.js"></script>
+		<![endif]-->
+		<link href="css/styles.css" rel="stylesheet">
+	</head>
+	<body>
+<nav class="navbar navbar-static">
+    <div class="container">
+        <h1><button type="batton" class="btn btn-default pull-right" onclick="return document.location.replace('logout.php')">выход</h1>
+        <h2>Football Manager</h2>
+    </div>
+</nav><!-- /.navbar -->
+
+<header class="masthead">
+  <div class="container">
+    <div class="row">
+		<div class="col-md-6">
+			<h1>Личный кабинет</h1>
+			<h1 id="welcome"></h1>
+		</div>
+      <div class="col-md-6">
+        <div class="well pull-right">
+          <img src="favicon1.png">        
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+<!-- Begin Body -->
+<div class="container">
+	<div class="no-gutter row">
+      		<!-- left side column -->
+  			<div class="col-md-3">
+              	<div class="panel panel-default" id="sidebar">
+                <div class="panel-heading" style="background-color:#888;color:#fff;">Меню</div> 
+                <div class="panel-body">
+      			<ul class="nav nav-stacked">
+					<li><button class="btn btn-info btn-block" id="rules" name="rules" onclick="get_rules()">Правила игры</button></li>
+					<li><button class="btn btn-info btn-block" id="profile" name="profile" onclick="get_profile()">Профиль игрока</button></li>
+					<li><button class="btn btn-info btn-block" id="stats" name="stats" onclick="get_stats()">Статистика команд</button></li>
+					<li><button class="btn btn-info btn-block" id="editor" name="editor" onclick="get_editor()">Редактор команды</button></li>
+					<li><button class="btn btn-info btn-block" id="free_players" name="free_players" onclick="get_free_players()">Свободные игроки</button></li>
+					<li><button class="btn btn-info btn-block" id="free_trainers" name="free_trainers" onclick="get_free_trainers()">Свободные тренера</button></li>
+				</ul>
+                <!--/acc-->
+                  <hr>
+                </div><!--/panel body-->
+              </div><!--/panel-->
+      		</div><!--/end left column-->
+      		<!-- mid content column-->
+      		<div class="col-md-7" id="content">
+            	<div class="panel">
+    			<div class="panel-heading" style="background-color:#111;color:#fff;"></div>   
+              	<div class="panel-body">
+                  <div class="row">
+                  <div class="col-md-8" id="pre_output">
+                  </div> 
+                  <div class="col col-sm-4">
+                  </div>   
+                </div>
+                  <hr>
+                  </div><!--/panel-body-->
+                </div><!--/panel-->
+              	<!--/end right column-->
+      	</div> 
+  	</div>
+</div>
+	<footer>
+	<div class="container">
+		<div class="row">
+		<div class="col-md-12 text-center"><h5>Специально для Жиданова Константина Александровича ©2019</h5></div>
+		</div>
+	</div>
+	</footer>
+</body>
+</html>
+<script>
+    function get(url) {
+        return new Promise(function (succeed, fail) {
+            var request = new XMLHttpRequest();
+            request.open("GET", url, true);
+            request.addEventListener("load", function () {
+                if (request.status == 200)
+                    succeed(request.response);
+                else
+                    fail(request.statusText);
+            });
+            request.send();
+        });
+    };
+    function get_user_info() {
+        var url = "get_user_info.php";
+        get(url).then(function (response_text) {
+            var user = JSON.parse(response_text);
+			var output = document.getElementById("welcome");
+            var welcome = document.createTextNode("Добро пожаловать, " + user["name"] + "!");
+            output.appendChild(welcome);
+        }).catch(function (text)  {
+            alert(text);
+            window.location.replace("http://"+text);
+        });
+    };
+    get_user_info();
+	get_rules();
+    function get_rules(){
+        var url = "get_rules.php";
+        get(url).then(function (response_text) {
+            var pre_output = document.getElementById("pre_output");
+            var output = document.getElementById("output");
+            if (output!=null){
+                output.innerHTML=response_text;
+            }
+            else{
+                pre_output.innerHTML=response_text;
+            }
+        }).catch((error) => {
+            alert(error);
+        });
+    };
+    function get_profile(){
+        var url = "get_profile.php";
+        get(url).then(function (response_text) {
+            var pre_output = document.getElementById("pre_output");
+            var output = document.getElementById("output");
+            if (output!=null){
+                output.innerHTML=response_text;
+            }
+            else{
+                pre_output.innerHTML=response_text;
+            }
+        }).catch((error) => {
+            alert(error);
+        });
+    };
+    function get_stats() {
+        var url = "get_stats.php";
+        get(url).then(function (response_text) {
+            var pre_output = document.getElementById("pre_output");
+            var output = document.getElementById("output");
+            if (output!=null){
+                output.innerHTML=response_text;
+			}
+			else{
+                pre_output.innerHTML=response_text;
+			}
+        }).catch((error) => {
+            alert(error);
+        });
+    };
+    function get_editor() {
+        var url = "get_editor.php";
+        get(url).then(function (response_text) {
+            var pre_output = document.getElementById("pre_output");
+            var output = document.getElementById("output");
+            if (output != null) {
+                output.innerHTML = response_text;
+            }
+            else {
+                pre_output.innerHTML = response_text;
+            }
+        }).catch((error) => {
+            alert(error);
+        });
+    };
+    function get_free_players() {
+        var url = "get_free_players.php";
+        get(url).then(function (response_text) {
+            var pre_output = document.getElementById("pre_output");
+            var output = document.getElementById("output");
+            if (output!=null){
+                output.innerHTML=response_text;
+            }
+            else{
+                pre_output.innerHTML=response_text;
+            }
+        }).catch((error) => {
+            alert(error);
+        });
+    };
+    function get_free_trainers() {
+        var url = "get_free_trainers.php";
+        get(url).then(function (response_text) {
+            var pre_output = document.getElementById("pre_output");
+            var output = document.getElementById("output");
+            if (output!=null){
+                output.innerHTML=response_text;
+            }
+            else{
+                pre_output.innerHTML=response_text;
+            }
+        }).catch((error) => {
+            alert(error);
+        });
+    };
+    function delete_team_member(member){
+        var url = "delete_team_member.php?member="+member;
+        get(url).then(function (response_text) {
+			alert(response_text);
+            get_editor();
+        }).catch((error) => {
+            alert(error);
+        });
+	};
+    function add_player(member){
+        var url = "add_player.php?member="+member;
+        get(url).then(function (response_text) {
+            alert(response_text);
+            get_free_players();
+        }).catch((error) => {
+            alert(error);
+        });
+    };
+    function add_trainer(member){
+        var url = "add_trainer.php?member="+member;
+        get(url).then(function (response_text) {
+            alert(response_text);
+            get_free_trainers();
+        }).catch((error) => {
+            alert(error);
+        });
+    };
+</script>
